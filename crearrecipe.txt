@@ -1,0 +1,22 @@
+{
+  "name": "Pasta Carbonara",
+  "description": "Deliciosa pasta carbonara tradicional",
+  "ingredients": [
+    {
+      "ingredientId": "uuid-del-huevo",
+      "quantity": 2
+    },
+    {
+      "ingredientId": "uuid-del-panceta",
+      "quantity": 200
+    },
+    {
+      "ingredientId": "uuid-de-la-pasta",
+      "quantity": 300
+    },
+    {
+      "ingredientId": "uuid-del-queso-parmesano",
+      "quantity": 100
+    }
+  ]
+}

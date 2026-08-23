@@ -1,0 +1,11 @@
+export enum UnitOfMeasure {
+  GRAMOS = 'GRAMOS',
+  MILILITROS = 'MILILITROS',
+  UNIDADES = 'UNIDADES',
+}
+
+export enum MovementType {
+  ENTRADA = 'ENTRADA',
+  SALIDA_MANUAL = 'SALIDA_MANUAL',
+  SALIDA_RECETA = 'SALIDA_RECETA',
+}
