@@ -16,6 +16,15 @@ export class User {
   @Column()
   last_name: string;
 
+  @Column({ select: false })
+  password: string;
+
+  @Column({ default: 'ADMIN' })
+  role: string;
+
+  @Column({ default: true })
+  isActive: boolean;
+
   // Relación: Un usuario puede hacer muchos movimientos
   @OneToMany(() => StockMovement, (movement) => movement.user)
   stockMovements: StockMovement[];
@@ -25,4 +34,4 @@ export class User {
 
   @UpdateDateColumn()
   updatedAt: Date;
-}
+}
