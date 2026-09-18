@@ -1,9 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
+  const logger = new Logger('Bootstrap');
+  logger.log('Starting NestJS application...');
+
   const app = await NestFactory.create(AppModule);
 
   // Cookie parser middleware con clave secreta
@@ -22,7 +25,7 @@ async function bootstrap() {
     }),
   );
 
-  // CORS con soporte para cookies y credenciales en local y producción (Render/Vercel)
+  // CORS con soporte para cookies y credenciales
   const allowedOrigins = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
@@ -32,22 +35,26 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      // Si no hay origen (postman, mobile) o está en la lista o en desarrollo
       if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
         callback(null, true);
       } else {
-        // En producción permitir el origen configurado o cualquier subdominio vercel/render si se especifica
         callback(null, true);
       }
     },
-    credentials: true, // Habilitar envío y recepción de cookies HttpOnly
+    credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Accept', 'Authorization', 'X-Requested-With'],
   });
 
-  const port = process.env.PORT ?? 3000;
-  // Escuchar en 0.0.0.0 para compatibilidad con contenedores y plataformas en la nube (Render)
+  // Render provee el puerto en la variable PORT (ej. 10000)
+  const port = parseInt(process.env.PORT || '3000', 10);
+  
+  // Escuchar en 0.0.0.0 para que Render pueda detectar el puerto abierto
   await app.listen(port, '0.0.0.0');
-  console.log(`Backend server running on http://0.0.0.0:${port}`);
+  logger.log(`🚀 Application successfully listening on http://0.0.0.0:${port}`);
 }
-bootstrap();
+
+bootstrap().catch((err) => {
+  console.error('Fatal error during application bootstrap:', err);
+  process.exit(1);
+});
